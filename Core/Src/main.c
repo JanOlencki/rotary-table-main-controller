@@ -28,6 +28,7 @@
 /* USER CODE BEGIN Includes */
 #include "usbd_cdc_if.h"
 #include "qc.h"
+#include "communication.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -101,32 +102,42 @@ int main(void) {
 	/* Infinite loop */
 	/* USER CODE BEGIN WHILE */
 	uint8_t is_charger_connected = 0;
+	uint8_t is_voltage_ok = 0;
 	float vcc_volt;
-	uint32_t vcc_conv;
-	uint8_t counter = 0;
 	while (1) {
-		vcc_volt = ADC_measVSense()
+		vcc_volt = ADC_measVSense();
+		is_voltage_ok = vcc_volt > 10;
 		is_charger_connected = (is_charger_connected << 1) | (vcc_volt > 4.5);
-		LED_dataOn();
-		USB_TxBufferCount = sprintf(USB_TxBufferFS, "VCC = %.3fV (%d, %d)\r\n",
-				vcc_volt, vcc_conv, counter);
-		while (CDC_Transmit_FS(USB_TxBufferFS, USB_TxBufferCount) == USBD_BUSY)
-			;
-		LED_dataOff();
-		if (is_charger_connected & 0b1) {
-			counter++;
-			LED_powerOn();
-		} else {
-			counter = 0;
-			LED_powerOff();
-		}
 		if ((is_charger_connected & 0b11) == 0b01) {
-			USB_TxBufferCount = sprintf(USB_TxBufferFS, "Charger detected\r\n");
-			while (CDC_Transmit_FS(USB_TxBufferFS, USB_TxBufferCount) == USBD_BUSY)
-				;
+			LED_powerOn();
 			QC_Handshake();
 			QC_Set12V();
 		}
+		if (is_voltage_ok) {
+			LED_powerOn();
+		} else {
+			LED_powerOff();
+		}
+
+		if (USB_RxHasNewData && USB_RxBufferCount == COM_REQUEST_FRAME_LENGTH) {
+			USB_RxHasNewData = 0;
+			LED_dataOn();
+			COM_RequestFrame req = COM_parseRequest(USB_RxBufferFS);
+			if (req.address == COM_CONTROLLER_ADDRESS) {
+				if (req.command == COM_COMMAND_GET_CONTROLLER_STATUS) {
+					COM_ResponseFrame resp;
+					resp.preamble = COM_PREAMBLE;
+					resp.address = COM_CONTROLLER_ADDRESS;
+					resp.resp_header = COM_RESP_CONTROLLER_STATUS_HEAD;
+					resp.payload[0] = is_voltage_ok;
+					resp.payload[1] = (uint8_t) (vcc_volt * 0b10000);
+					resp.crc = COM_genResponse(USB_TxBufferFS, &resp);
+					USB_TxBufferCount = COM_RESPONSE_FRAME_LENGTH;
+					CDC_Transmit_FS(USB_TxBufferFS, USB_TxBufferCount);
+				}
+			}
+		}
+		LED_dataOff();
 		/* USER CODE END WHILE */
 
 		/* USER CODE BEGIN 3 */

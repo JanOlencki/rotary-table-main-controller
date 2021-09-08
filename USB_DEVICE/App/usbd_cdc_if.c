@@ -95,7 +95,8 @@ uint8_t USB_RxBufferFS[APP_RX_DATA_SIZE];
 uint8_t USB_TxBufferFS[APP_TX_DATA_SIZE];
 
 /* USER CODE BEGIN PRIVATE_VARIABLES */
-
+uint8_t USB_RxHasNewData = 0;
+uint32_t USB_RxBufferCount = 0;
 /* USER CODE END PRIVATE_VARIABLES */
 
 /**
@@ -154,6 +155,8 @@ static int8_t CDC_Init_FS(void)
   /* Set Application Buffers */
   USBD_CDC_SetTxBuffer(&hUsbDeviceFS, USB_TxBufferFS, 0);
   USBD_CDC_SetRxBuffer(&hUsbDeviceFS, USB_RxBufferFS);
+  USB_RxHasNewData = 0;
+  USB_RxBufferCount = 0;
   return (USBD_OK);
   /* USER CODE END 3 */
 }
@@ -262,6 +265,8 @@ static int8_t CDC_Receive_FS(uint8_t* Buf, uint32_t *Len)
   /* USER CODE BEGIN 6 */
   USBD_CDC_SetRxBuffer(&hUsbDeviceFS, &Buf[0]);
   USBD_CDC_ReceivePacket(&hUsbDeviceFS);
+  USB_RxHasNewData = 1;
+  USB_RxBufferCount = *Len;
   return (USBD_OK);
   /* USER CODE END 6 */
 }
