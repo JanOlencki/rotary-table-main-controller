@@ -133,6 +133,12 @@ void HAL_ADC_MspDeInit(ADC_HandleTypeDef* adcHandle)
 }
 
 /* USER CODE BEGIN 1 */
+float ADC_measVSense() {
+	HAL_ADC_Start(&hadc);
+	HAL_ADC_PollForConversion(&hadc, 100);
+	uint32_t vcc_conv = HAL_ADC_GetValue(&hadc);
+	return (float) vcc_conv * ADC_CONV_RATIO * VCC_SENSE_RATIO;
+}
 
 /* USER CODE END 1 */
 

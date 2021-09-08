@@ -49,7 +49,7 @@
   * @{
   */
 /* Define size for the receive and transmit buffer over CDC */
-#define APP_RX_DATA_SIZE  1000
+#define APP_RX_DATA_SIZE
 #define APP_TX_DATA_SIZE  1000
 /* USER CODE BEGIN EXPORTED_DEFINES */
 
@@ -94,7 +94,8 @@
 extern USBD_CDC_ItfTypeDef USBD_Interface_fops_FS;
 
 /* USER CODE BEGIN EXPORTED_VARIABLES */
-
+extern uint8_t USB_RxBufferFS[];
+extern uint8_t USB_TxBufferFS[];
 /* USER CODE END EXPORTED_VARIABLES */
 
 /**
@@ -109,7 +110,6 @@ extern USBD_CDC_ItfTypeDef USBD_Interface_fops_FS;
 uint8_t CDC_Transmit_FS(uint8_t* Buf, uint16_t Len);
 
 /* USER CODE BEGIN EXPORTED_FUNCTIONS */
-
 /* USER CODE END EXPORTED_FUNCTIONS */
 
 /**

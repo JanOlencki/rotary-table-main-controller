@@ -62,6 +62,8 @@ void Error_Handler(void);
 #define RS_EN_RX_GPIO_Port GPIOA
 #define RS_EN_TX_Pin GPIO_PIN_5
 #define RS_EN_TX_GPIO_Port GPIOA
+#define LED_POWER_Pin GPIO_PIN_6
+#define LED_POWER_GPIO_Port GPIOA
 #define VCC_SENSE_Pin GPIO_PIN_7
 #define VCC_SENSE_GPIO_Port GPIOA
 #define DUSB_PD_N_L_Pin GPIO_PIN_2
@@ -72,6 +74,8 @@ void Error_Handler(void);
 #define DUSB_PD_P_L_GPIO_Port GPIOB
 #define DUSB_PD_P_H_Pin GPIO_PIN_12
 #define DUSB_PD_P_H_GPIO_Port GPIOB
+#define LED_DATA_Pin GPIO_PIN_15
+#define LED_DATA_GPIO_Port GPIOA
 /* USER CODE BEGIN Private defines */
 
 /* USER CODE END Private defines */

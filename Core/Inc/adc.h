@@ -34,13 +34,14 @@ extern ADC_ChannelConfTypeDef adc_ch_vcc_sense;
 extern ADC_HandleTypeDef hadc;
 
 /* USER CODE BEGIN Private defines */
-
+#define ADC_CONV_RATIO (3.3f/4096.0f)
+#define VCC_SENSE_RATIO (1.0f/0.22f)
 /* USER CODE END Private defines */
 
 void MX_ADC_Init(void);
 
 /* USER CODE BEGIN Prototypes */
-
+float ADC_measVSense();
 /* USER CODE END Prototypes */
 
 #ifdef __cplusplus
