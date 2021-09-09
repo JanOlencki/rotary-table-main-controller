@@ -40,10 +40,10 @@ extern UART_HandleTypeDef huart2;
 void MX_USART2_UART_Init(void);
 
 /* USER CODE BEGIN Prototypes */
-UART_RS_RxEnable();
-UART_RS_RxDisable();
-UART_RS_TxEnable();
-UART_RS_TxDisable();
+void UART_RSRxEnable();
+void UART_RSRxDisable();
+void UART_RSTxEnable();
+void UART_RSTxDisable();
 /* USER CODE END Prototypes */
 
 #ifdef __cplusplus

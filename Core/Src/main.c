@@ -60,7 +60,8 @@ void SystemClock_Config(void);
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
-
+uint8_t UART_txBuffer[COM_REQUEST_FRAME_LENGTH];
+uint8_t UART_rxBuffer[COM_RESPONSE_FRAME_LENGTH];
 /* USER CODE END 0 */
 
 /**
@@ -135,6 +136,11 @@ int main(void) {
 					USB_TxBufferCount = COM_RESPONSE_FRAME_LENGTH;
 					CDC_Transmit_FS(USB_TxBufferFS, USB_TxBufferCount);
 				}
+			} else {
+				UART_RSRxDisable();
+				UART_RSTxEnable();
+				memcpy(UART_txBuffer, USB_RxBufferFS, USB_RxBufferCount);
+				HAL_UART_Transmit_IT(&huart2, UART_txBuffer, USB_RxBufferCount);
 			}
 		}
 		LED_dataOff();
@@ -188,7 +194,19 @@ void SystemClock_Config(void) {
 }
 
 /* USER CODE BEGIN 4 */
-
+void USART2_IRQHandler() {
+	HAL_UART_IRQHandler(&huart2);
+}
+void HAL_UART_TxCpltCallback(UART_HandleTypeDef *huart) {
+	UART_RSRxEnable();
+	HAL_UART_Receive_IT(&huart2, UART_rxBuffer, COM_RESPONSE_FRAME_LENGTH);
+}
+void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart) {
+	UART_RSRxDisable();
+	memcpy(USB_TxBufferFS, UART_rxBuffer, sizeof(UART_rxBuffer));
+	USB_TxBufferCount = COM_RESPONSE_FRAME_LENGTH;
+	CDC_Transmit_FS(USB_TxBufferFS, USB_TxBufferCount);
+}
 /* USER CODE END 4 */
 
 /**
