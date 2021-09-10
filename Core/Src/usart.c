@@ -1,4 +1,4 @@
- /**
+/**
  ******************************************************************************
  * @file    usart.c
  * @brief   This file provides code for the configuration
@@ -52,7 +52,8 @@ void MX_USART2_UART_Init(void) {
 		Error_Handler();
 	}
 	/* USER CODE BEGIN USART2_Init 2 */
-
+	UART_RSRxDisable();
+	UART_RSTxEnable();
 	/* USER CODE END USART2_Init 2 */
 
 }
@@ -122,10 +123,10 @@ void UART_RSRxDisable() {
 	HAL_GPIO_WritePin(RS_EN_RX_GPIO_Port, RS_EN_RX_Pin, GPIO_PIN_SET);
 }
 void UART_RSTxEnable() {
-	HAL_GPIO_WritePin(RS_EN_TX_GPIO_Port, RS_EN_TX_Pin, GPIO_PIN_RESET);
+	HAL_GPIO_WritePin(RS_EN_TX_GPIO_Port, RS_EN_TX_Pin, GPIO_PIN_SET);
 }
 void UART_RSTxDisable() {
-	HAL_GPIO_WritePin(RS_EN_TX_GPIO_Port, RS_EN_TX_Pin, GPIO_PIN_SET);
+	HAL_GPIO_WritePin(RS_EN_TX_GPIO_Port, RS_EN_TX_Pin, GPIO_PIN_RESET);
 }
 /* USER CODE END 1 */
 

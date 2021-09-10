@@ -89,12 +89,14 @@
 /* Create buffer for reception and transmission           */
 /* It's up to user to redefine and/or remove those define */
 /** Received data over USB are stored in this buffer      */
-uint8_t USB_RxBufferFS[APP_RX_DATA_SIZE];
+uint8_t UserRxBufferFS[APP_RX_DATA_SIZE];
 
 /** Data to send over USB CDC are stored in this buffer   */
-uint8_t USB_TxBufferFS[APP_TX_DATA_SIZE];
+uint8_t UserTxBufferFS[APP_TX_DATA_SIZE];
 
 /* USER CODE BEGIN PRIVATE_VARIABLES */
+uint8_t USB_RxBufferFS[APP_RX_DATA_SIZE];
+uint8_t USB_TxBufferFS[APP_TX_DATA_SIZE];
 uint8_t USB_RxHasNewData = 0;
 uint32_t USB_RxBufferCount = 0;
 /* USER CODE END PRIVATE_VARIABLES */
