@@ -137,13 +137,13 @@ int main(void)
 					resp.crc = COM_genResponse(USB_TxBufferFS, &resp);
 					USB_TxBufferCount = COM_RESPONSE_FRAME_LENGTH;
 					CDC_Transmit_FS(USB_TxBufferFS, USB_TxBufferCount);
+					LED_dataOff();
 				}
 			} else {
 				UART_RSRxDisable();
 				UART_RSTxEnable();
 				memcpy(UART_txBuffer, USB_RxBufferFS, USB_RxBufferCount);
 				HAL_UART_Transmit_IT(&huart2, UART_txBuffer, USB_RxBufferCount);
-				LED_dataOn();
 			}
 		}
     /* USER CODE END WHILE */
