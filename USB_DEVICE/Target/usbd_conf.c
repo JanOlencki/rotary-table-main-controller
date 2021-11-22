@@ -20,8 +20,8 @@
 /* USER CODE END Header */
 
 /* Includes ------------------------------------------------------------------*/
-#include "stm32f0xx.h"
-#include "stm32f0xx_hal.h"
+#include "stm32l0xx.h"
+#include "stm32l0xx_hal.h"
 #include "usbd_def.h"
 #include "usbd_core.h"
 #include "usbd_cdc.h"
@@ -55,6 +55,7 @@ void Error_Handler(void);
 static USBD_StatusTypeDef USBD_Get_USB_Status(HAL_StatusTypeDef hal_status);
 /* USER CODE BEGIN 1 */
 static void SystemClockConfig_Resume(void);
+
 /* USER CODE END 1 */
 extern void SystemClock_Config(void);
 
@@ -89,7 +90,7 @@ void HAL_PCD_MspDeInit(PCD_HandleTypeDef* pcdHandle)
   /* USER CODE BEGIN USB_MspDeInit 0 */
 
   /* USER CODE END USB_MspDeInit 0 */
-    /* Peripheral clock disable */
+    /* Disable Peripheral clock */
     __HAL_RCC_USB_CLK_DISABLE();
 
     /* Peripheral interrupt Deinit*/
@@ -608,7 +609,7 @@ void USBD_static_free(void *p)
 
 /* USER CODE BEGIN 5 */
 /**
-  * @brief  Configures system clock after wake-up from USB Resume CallBack:
+  * @brief  Configures system clock after wake-up from USB resume callBack:
   *         enable HSI, PLL and select PLL as system clock source.
   * @retval None
   */
